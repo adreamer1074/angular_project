@@ -1,4 +1,3 @@
-<h1>hello</h1>
 <div class="container-fluid bg-light" style="min-height: 100vh;">
     <!-- Main section with light background -->
     <section class="bg-light">
@@ -11,10 +10,36 @@
                         <!-- itemを展開する -->
                   {{item}}
                 </button>
-              </div>   
+              </div> 
+
+                <!-- Display the number of items and sorting options if a category is selected -->
+            <div class="d-flex justify-content-between align-items-center mb-4" *ngIf="selectedCategory">
+                <!-- Display the number of items found -->
+                <div class="col-3">
+                    <p class="text-left mb-0">{{filteredProducts.length}} items found</p>
+                </div>
+                   <!-- Sorting options -->
+                    <!-- 画面遷移した時defaultのoptionに自動的に更新されていない。（後で修正） -->
+                   <div class="d-flex align-items-center">
+                    <select id="sortOptions" class="form-select" (change) ="sortProducts($event)">
+                        <option value="default">Sort by: Product Id</option>
+                        <option value="priceAsc">Sort by: Price: Low to High</option>
+                        <option value="priceDesc">Sort by: Price: High to Low</option>
+                        <option value="ratingDesc">Sort by: Avg. Customer Review</option>
+
+                    </select>
+                </div>
+            </div>  
+
             <div class="row">
+                <!-- Display message if no products are found -->
+                 <ng-container *ngIf="filteredProducts.length === 0">
+                    <div class="col-md-12 text-center">
+                        <h6>No products found in this category</h6>
+                    </div>
+                 </ng-container>
                 <!-- Display product cards if products are found -->
-                <ng-container>
+                <ng-container *ngIf="filteredProducts.length > 0">
                     <div *ngFor="let item of filteredProducts; let i = index; trackBy: trackByIndex"
                     class="col-md-12 col-lg-3 pt-2 mb-4 mb-lg-0">
                     <app-product-card [product]= "item"></app-product-card>

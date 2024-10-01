@@ -21,11 +21,12 @@
       <!-- Right elements -->
       <div class="d-flex align-items-center">
           <!-- Cart Icon -->
-          <a class="text-white me-3" href="#">
+          <a class="text-white me-3" (click)="showCart()">
               <i class="fa fa-shopping-cart"></i>
           </a>
           <!-- Cart Dropdown Menu -->
-          <div class="dropdown-menu dropdown-menu-end " style="position: absolute; right: 13px; top: 60px;"
+          <div [class]="isCartVisible ? 'dropdown-menu dropdown-menu-end show' : 'dropdown-menu dropdown-menu-end' " style="position: absolute; right: 13px; top: 60px;"
+                style="position: absolute; right: 13px; top: 60px;" aria-labelledby="navbarDropdownMenuAvatar"
               aria-labelledby="navbarDropdownMenuAvatar">
               <div class="row">
                   <!-- Cart Header -->
@@ -33,7 +34,7 @@
                       <h6>Cart Items</h6>
                   </div>
                   <div class="col-4 text-end">
-                      <i class="fa fa-close p-2"></i>
+                      <i class="fa fa-close p-2" (click)="showCart()"></i>
                   </div>
               </div>
 
@@ -41,16 +42,16 @@
               <table class="table table-sm">
                   <tbody>
                       <!-- Display each cart item -->
-                      <tr>
+                      <tr *ngFor="let item of cartItems; let i = index; trackBy: trackByindex">
                           <td>
                               <div class="rounded"
-                                  style="background-image: url(); width: 60px; height: 60px; background-size: cover;">
+                                  style="background-image: url({{item.imageUrl}}); width: 60px; height: 60px; background-size: cover;">
                               </div>
                           </td>
-                          <td class="align-middle text-left">French Door Fridge</td>
-                          <td class="align-middle text-right">$2200</td>
+                          <td class="align-middle text-left">{{item.productName}}</td>
+                          <td class="align-middle text-right">{{item.price}}</td>
                           <td class="align-middle text-center">
-                              <a href="#" data-toggle="modal" data-title="Delete your product?">
+                              <a (click)="removeProduct(i)" data-toggle="modal" data-title="Delete your product?">
                                   <i class="fa fa-trash"></i>
                               </a>
                           </td>
@@ -58,11 +59,11 @@
                       <!-- Display total quantity and price -->
                       <tr>
                           <td colspan="2" class="align-middle text-left"><strong>Quantity</strong></td>
-                          <td colspan="2" class="align-middle text-right">1</td>
+                          <td colspan="2" class="align-middle text-right">{{getTotalQuantity()}}</td>
                       </tr>
                       <tr>
                           <td colspan="2" class="align-middle text-left"><strong>Price</strong></td>
-                          <td colspan="2" class="align-middle text-right">$2200</td>
+                          <td colspan="2" class="align-middle text-right">¥{{getTotalPrice()}}</td>
                       </tr>
                   </tbody>
               </table>

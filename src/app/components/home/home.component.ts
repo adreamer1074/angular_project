@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // CommonModuleをインポート
-import { Product } from '../../models/product.model'; 
-import { ProductCardComponent } from '../product-card/product-card.component'; 
+import { Product } from '../../models/product.model';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule,ProductCardComponent],  // CommonModuleをインポート
+  imports: [CommonModule, ProductCardComponent],  // CommonModuleをインポート
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -31,7 +31,7 @@ export class HomeComponent {
   ];
 
   public filteredProducts: Product[] = [];
-  public selectedCategory: string ='';
+  public selectedCategory: string = '';
 
   constructor() {
     this.productList = this.markNewProducts(this.productList);
@@ -45,7 +45,7 @@ export class HomeComponent {
   private markNewProducts(productList: Product[]): Product[] {
     const referenceDate = new Date('2024-04-01');
     const threeMonthAgo = new Date(referenceDate);
-    threeMonthAgo.setMonth(threeMonthAgo.getMonth() -3);
+    threeMonthAgo.setMonth(threeMonthAgo.getMonth() - 3);
 
     return productList.map(product => {
       const releaseDate = new Date(product.releaseDate);
@@ -55,12 +55,33 @@ export class HomeComponent {
   }
 
   public filterCategory(category: string): void {
-    if(this.selectedCategory === category) {
+    if (this.selectedCategory === category) {
       this.selectedCategory = '';
       this.filteredProducts = this.productList;
     } else {
       this.selectedCategory = category;
       this.filteredProducts = this.productList.filter(product => product.category === category);
+    }
+  }
+
+  public sortProducts(event: Event): void {
+    const target = event.target as HTMLSelectElement | null;
+    if (target) {
+      const sortOption = target.value;
+      switch (sortOption) {
+        case 'priceAsc':
+          this.filteredProducts.sort((a, b) => a.price - b.price)
+          break;
+        case 'priceDesc':
+          this.filteredProducts.sort((a, b) => b.price - a.price)
+          break;
+        case 'ratingDesc':
+          this.filteredProducts.sort((a, b) => b.rating - a.rating)
+          break;
+        default:
+          this.filteredProducts.sort((a, b) => a.productId - b.productId)
+          break;
+      }
     }
   }
 
